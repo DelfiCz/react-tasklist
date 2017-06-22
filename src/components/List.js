@@ -19,6 +19,7 @@ export default class App extends React.Component {
 
   render() {
     var setActive = this.props.setActive;
+	var addItem = this.props.addItem;	
 	var removeItem = this.props.removeItem;
 
     //vytvoříme pro každou todo položku její DOM vyjádření
@@ -37,10 +38,10 @@ export default class App extends React.Component {
 	}
 	//getActiveId = 1;
 	console.log(getActiveId);
-	console.log('novytext');
     //vykreslíme komponenty
     return (<div>
               <ul>{items}</ul>
+			<button onClick={addItem.bind(this,"new task")}>+</button>
 	      	<button onClick={removeItem.bind(this,getActiveId)}>X</button>
             </div>);
   }

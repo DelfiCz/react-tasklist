@@ -21,14 +21,15 @@ var initialState = [task00, task01];
 export default function reduc_todo(state=initialState, action)	{
 
 
-	var newTask =	{
-						title: action.text,
-						completed: false,
-						active: false  
-					}
+
 	switch (action.type)	{
 		case 'ADD':
-		return [...initialState, newTask];
+			var newTask =	{
+					title: action.text,
+					completed: false,
+					active: false  
+				}
+			return [...state, newTask];
 
 
 		case 'REMOVE':
@@ -40,7 +41,6 @@ export default function reduc_todo(state=initialState, action)	{
 			var newState = [...state];
 			var i=0
 			for (i =0; i< newState.length; i++)	{
-							console.log(newState[i]);
 				newState[i].active = false;
 			}
 
