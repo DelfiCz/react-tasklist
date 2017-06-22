@@ -3,6 +3,6 @@ import React from 'react';
 export default class Item extends React.Component {
 
   render() {
-    return <li>{this.props.text} <button onClick={this.props.removeItem}>✖</button></li>;
+    return <li onClick={this.props.setActive} >{this.props.text.title} </li>;
   }
 };

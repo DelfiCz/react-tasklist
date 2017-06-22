@@ -16,18 +16,32 @@ export default class App extends React.Component {
   }
 
 
+
   render() {
-    //V props je uložena funkce na odebírání úkolů
-    var removeItem = this.props.removeItem;
+    var setActive = this.props.setActive;
+	var removeItem = this.props.removeItem;
 
     //vytvoříme pro každou todo položku její DOM vyjádření
     var items = this.state.tasks.map(function(task, id) {
-      return <Item key={id} text={task} removeItem={function() { removeItem(id) }}/>
+      return <Item key={id} text={task} setActive={function() { setActive(id) }}/>
     });
-
+	
+	var state = this.props.store.getState();
+	var getActiveId;
+	//var getActiveId = state.filter(function(task) { return task.active == true});
+	for (var i=0;i<state.length;i++)	{
+		if(state[i].active == true)	{
+			getActiveId = i;
+			break;
+		}
+	}
+	//getActiveId = 1;
+	console.log(getActiveId);
+	console.log('novytext');
     //vykreslíme komponenty
     return (<div>
               <ul>{items}</ul>
+	      	<button onClick={removeItem.bind(this,getActiveId)}>X</button>
             </div>);
   }
 };
