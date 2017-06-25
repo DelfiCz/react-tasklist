@@ -3,11 +3,12 @@ import React from 'react';
 //Import vnořené komponenty
 import Item from './Item';
 
-export default class App extends React.Component {
+export default class List extends React.Component {
+
 
 
   updateState() {
-    this.setState({tasks: this.props.store.getState()});
+    this.setState(this.props.store.getState());
   }
 
   componentWillMount() {
@@ -23,21 +24,13 @@ export default class App extends React.Component {
 	var removeItem = this.props.removeItem;
 
     //vytvoříme pro každou todo položku její DOM vyjádření
-    var items = this.state.tasks.map(function(task, id) {
+    var items = this.state.todo.list.map(function(task, id) {
       return <Item key={id} text={task} setActive={function() { setActive(id) }}/>
     });
 	
 	var state = this.props.store.getState();
-	var getActiveId;
-	//var getActiveId = state.filter(function(task) { return task.active == true});
-	for (var i=0;i<state.length;i++)	{
-		if(state[i].active == true)	{
-			getActiveId = i;
-			break;
-		}
-	}
-	//getActiveId = 1;
-	console.log(getActiveId);
+	var getActiveId = state.todo.active;
+
     //vykreslíme komponenty
     return (<div>
               <ul>{items}</ul>

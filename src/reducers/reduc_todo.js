@@ -1,53 +1,50 @@
 
 
-var task00 =	{
-					title: "Koupit mleko",
-					completed: false,
-					active: true  
+var task00 = {
+	title: "Koupit mleko",
+	completed: false,
+};
 
+var task01 = {
+	title: "Koupit syry",
+	completed: false,
+};
 
-				}
+var initialState = {
+	list: [task00, task01],
+	active: 0
+};
 
-var task01 =	{
-					title: "Koupit syry",
-					completed: false,
-					active: false  
+export default function reduc_todo(state = initialState, action) {
 
-
-				}
-
-var initialState = [task00, task01];
-
-export default function reduc_todo(state=initialState, action)	{
-
-
-
-	switch (action.type)	{
+	switch (action.type) {
 		case 'ADD':
-			var newTask =	{
-					title: action.text,
-					completed: false,
-					active: false  
-				}
-			return [...state, newTask];
-
+			var newTask = {
+				title: action.text,
+				completed: false,
+			};
+			return {
+				list: [...state.list, newTask],
+				active: state.active
+			};
 
 		case 'REMOVE':
-			var newState = [...state];
-			newState.splice(action.id, 1);
-			return newState;
+			var newList = [...state.list];
+			newList.splice(action.id, 1);
+			return {
+				list: newList,
+				active: state.active
+			};
 
 		case 'SET_ACTIVE':
-			var newState = [...state];
-			var i=0
-			for (i =0; i< newState.length; i++)	{
-				newState[i].active = false;
-			}
+			var newState = [...state.list];
+			return {
+				list: newState,
+				active: action.id
+			};
 
-			newState[action.id].active = true;
-    	default:
-      		return state;
-
+		default:
+			return state;
 	}
 
 
