@@ -18,6 +18,7 @@ var initialState = {
 export default function reduc_todo(state = initialState, action) {
 
 	switch (action.type) {
+
 		case 'ADD':
 			var newTask = {
 				title: action.text,
@@ -37,10 +38,27 @@ export default function reduc_todo(state = initialState, action) {
 			};
 
 		case 'SET_ACTIVE':
-			var newState = [...state.list];
+			var newList = [...state.list];
 			return {
-				list: newState,
+				list: newList,
 				active: action.id
+			};
+
+		case 'CHANGE_TITLE':
+		
+			var newList = [...state.list];
+			newList[action.id].title = action.title;
+			console.log(newList);
+			return {
+				list: newList,
+				active: state.active
+			};
+		case 'CHANGE_CONTENT':
+			var newList = [...state.list];
+			newList[action.id].content = action.content;
+			return {
+				list: newList,
+				active: state.active
 			};
 
 		default:

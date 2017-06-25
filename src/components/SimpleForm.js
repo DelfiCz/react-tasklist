@@ -9,10 +9,9 @@ const SimpleForm = props => {
         <label>Title</label>
         <div>
           <Field
-            name="firstName"
+            name="title"
             component="input"
             type="text"
-            value="bla"
           />
         </div>
       </div>
@@ -20,9 +19,8 @@ const SimpleForm = props => {
         <label>Content</label>
         <div>
           <Field
-            name="lastName"
-            component="input"
-            type="text"
+            name="content"
+            component="textarea"
           />
         </div>
       </div>

@@ -16,6 +16,8 @@ const reducer = combineReducers(reducers)
 const store = createStore(reducer,undefined,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 var taskList = [...store.getState().todo.list];
 
+
+
 var removeItem = function(id) {
   store.dispatch({ type: 'REMOVE', id: id });
 }
@@ -29,7 +31,12 @@ var setActive = function(id) {
 }
 
 var showResults = function (values) {
-  console.log('Results');
+  //var state = store.getState().todo;
+  //var task = state.list[state.active]
+  //task = values.title
+  var id = store.getState().todo.active;
+  store.dispatch({ type: 'CHANGE_TITLE', id: id, title: values.title });
+  store.dispatch({ type: 'CHANGE_CONTENT', id: id, content: values.content });
 }
 
 ReactDOM.render(
