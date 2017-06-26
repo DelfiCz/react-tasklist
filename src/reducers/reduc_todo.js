@@ -20,7 +20,7 @@ var task01 = {
 var initialState = {
 	list: [task00, task01],
 	active: 0,
-	formSubtasks: task00.subtasks
+	formSubtasks: [...task00.subtasks]
 };
 
 

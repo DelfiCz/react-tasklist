@@ -25,11 +25,9 @@ class SimpleForm extends React.Component {
     var activeTask = [...this.props.store.getState().todo.list[this.props.store.getState().todo.active]]
     var activeSubtasks = this.props.store.getState().todo.formSubtasks;
 
-    var subtasks = activeSubtasks.map(function (subtask, id) {
-      return <Subtask title={subtask.title} id={id} done={subtask.done} />
-    });
 
-   
+
+
 
 
     return (
@@ -66,29 +64,57 @@ class SimpleForm extends React.Component {
                 type="text"
                 component="input" />
               <button
-                name={'button'+index }
+                name={'button_remove' + index}
                 type="button"
-                onClick={() => activeSubtasks.splice(index,1)}>✖</button>
+                onClick={() => {
+                  activeSubtasks.splice(index, 1);
+                  this.props.store.dispatch({
+                    type: '@@redux-form/FOCUS',
+                    meta: {
+                      form: "simple",
+                      field: "button"
+                    }
+                  })
+                }}>
+                ✖
+                </button>
 
 
             </li>
           )}
+          <button
+            name={'button_add'}
+            type="button"
+            onClick={() => {
+              activeSubtasks.push({
+                title: 'new subtask',
+                done: false
+              });
+              this.props.store.dispatch({
+            type: '@@redux-form/FOCUS',
+                meta: {
+            form: "simple",
+                  field: "button"
+                }
+              })
+            }}>✚
+          </button>
         </div>
+      <div>
+        <label>Deadline</label>
         <div>
-          <label>Deadline</label>
-          <div>
-            <Field
-              name="deadline"
-              component="input"
-              type="text"
-            />
-          </div>
+          <Field
+            name="deadline"
+            component="input"
+            type="text"
+          />
         </div>
+      </div>
 
-        <div>
-          <button onClick={handleSubmit} disabled={pristine}>Submit</button>
-        </div>
-      </form>
+      <div>
+        <button onClick={handleSubmit} disabled={pristine}>Submit</button>
+      </div>
+      </form >
     );
   }
 };
