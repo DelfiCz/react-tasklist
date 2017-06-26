@@ -1,36 +1,103 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, FieldArray } from 'redux-form';
+import { connect } from 'react-redux';
 
-const SimpleForm = props => {
-  const { handleSubmit, pristine, reset, submitting } = props;
-  return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Title</label>
+function mapStateToProps(state) {
+
+  return {
+    initialValues: { title: "neco", content: "neco2", deadline: "neco3" },
+  }
+}
+
+function mapDispatchToProps(state) {
+  return {}
+}
+
+class SimpleForm extends React.Component {
+
+
+
+  render() {
+
+    var pristine = this.props.pristine;
+    var submitting = this.props.submitting;
+    var handleSubmit = this.props.handleSubmit;
+    var activeTask = [...this.props.store.getState().todo.list[this.props.store.getState().todo.active]]
+    var activeSubtasks = this.props.store.getState().todo.formSubtasks;
+
+    var subtasks = activeSubtasks.map(function (subtask, id) {
+      return <Subtask title={subtask.title} id={id} done={subtask.done} />
+    });
+
+   
+
+
+    return (
+      <form onSubmit={handleSubmit} >
         <div>
-          <Field
-            name="title"
-            component="input"
-            type="text"
-          />
+          <label>Title</label>
+          <div>
+            <Field
+              name="title"
+              component="input"
+              type="text"
+            />
+          </div>
         </div>
-      </div>
-      <div>
-        <label>Content</label>
         <div>
-          <Field
-            name="content"
-            component="textarea"
-          />
+          <label>Content</label>
+          <div>
+            <Field
+              name="content"
+              component="textarea"
+            />
+          </div>
         </div>
-      </div>
-      <div>
-        <button type="submit" disabled={pristine || submitting}>Submit</button>
-      </div>
-    </form>
-  );
+        <div>
+          <label>Subtasks</label>
+          {activeSubtasks.map((subtask, index) =>
+            <li key={index}>
+              <Field
+                name={`subtasks[${index}].done`}
+                type="checkbox"
+                component="input" />
+              <Field
+                name={`subtasks[${index}].title`}
+                type="text"
+                component="input" />
+              <button
+                name={'button'+index }
+                type="button"
+                onClick={() => activeSubtasks.splice(index,1)}>✖</button>
+
+
+            </li>
+          )}
+        </div>
+        <div>
+          <label>Deadline</label>
+          <div>
+            <Field
+              name="deadline"
+              component="input"
+              type="text"
+            />
+          </div>
+        </div>
+
+        <div>
+          <button onClick={handleSubmit} disabled={pristine}>Submit</button>
+        </div>
+      </form>
+    );
+  }
 };
 
+//SimpleForm = connect(
+//  mapStateToProps
+//)(SimpleForm);
+
 export default reduxForm({
-  form: 'simple', // a unique identifier for this form
-})(SimpleForm);
+  form: 'simple',
+  enableReinitialize: true
+})(connect(mapStateToProps, mapDispatchToProps)(SimpleForm));
