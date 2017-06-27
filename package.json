@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "devserver": "webpack-dev-server --inline",
+    "devserver": "webpack-dev-server --inline --hot --host 0.0.0.0 --public 85.71.202.81 --content-base .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack": "webpack"
   },

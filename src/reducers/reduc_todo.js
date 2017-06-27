@@ -1,17 +1,17 @@
 
 
 var task00 = {
-	title: "Koupit mleko",
+	title: "Postavit dum",
 	content: "",
-	subtasks: [{ title: "tsk0", done: false }, { title: "tsk1", done: false }],
+	subtasks: [{ title: "Nakoupit do baumaxu", done: false }, { title: "Zaplatit zedniky", done: false }],
 	hasDeadline: false,
 	deadline: ""
 };
 
 var task01 = {
-	title: "Koupit syry",
+	title: "Koupit nabytek",
 	content: "",
-	subtasks: [{ title: "syr tsk0", done: false }],
+	subtasks: [{ title: "Navstivit IKEA", done: false }],
 	hasDeadline: false,
 	deadline: ""
 };
