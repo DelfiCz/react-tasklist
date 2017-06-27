@@ -25,11 +25,6 @@ class SimpleForm extends React.Component {
     var activeTask = [...this.props.store.getState().todo.list[this.props.store.getState().todo.active]]
     var activeSubtasks = this.props.store.getState().todo.formSubtasks;
 
-
-
-
-
-
     return (
       <form onSubmit={handleSubmit} >
         <div>
@@ -53,35 +48,37 @@ class SimpleForm extends React.Component {
         </div>
         <div>
           <label>Subtasks</label>
-          {activeSubtasks.map((subtask, index) =>
-            <li key={index}>
-              <Field
-                name={`subtasks[${index}].done`}
-                type="checkbox"
-                component="input" />
-              <Field
-                name={`subtasks[${index}].title`}
-                type="text"
-                component="input" />
-              <button
-                name={'button_remove' + index}
-                type="button"
-                onClick={() => {
-                  activeSubtasks.splice(index, 1);
-                  this.props.store.dispatch({
-                    type: '@@redux-form/FOCUS',
-                    meta: {
-                      form: "simple",
-                      field: "button"
-                    }
-                  })
-                }}>
-                ✖
+          <ul className="subtaskUl">
+            {activeSubtasks.map((subtask, index) =>
+              <li key={index}>
+                <Field
+                  name={`subtasks[${index}].done`}
+                  type="checkbox"
+                  component="input" />
+                <Field
+                  name={`subtasks[${index}].title`}
+                  type="text"
+                  component="input" />
+                <button
+                  name={'button_remove' + index}
+                  type="button"
+                  onClick={() => {
+                    activeSubtasks.splice(index, 1);
+                    this.props.store.dispatch({
+                      type: '@@redux-form/FOCUS',
+                      meta: {
+                        form: "simple",
+                        field: "button"
+                      }
+                    })
+                  }}>
+                  ✖
                 </button>
 
 
-            </li>
-          )}
+              </li>
+            )}
+          </ul>
           <button
             name={'button_add'}
             type="button"
@@ -91,29 +88,29 @@ class SimpleForm extends React.Component {
                 done: false
               });
               this.props.store.dispatch({
-            type: '@@redux-form/FOCUS',
+                type: '@@redux-form/FOCUS',
                 meta: {
-            form: "simple",
+                  form: "simple",
                   field: "button"
                 }
               })
             }}>✚
           </button>
         </div>
-      <div>
-        <label>Deadline</label>
         <div>
-          <Field
-            name="deadline"
-            component="input"
-            type="text"
-          />
+          <label>Deadline</label>
+          <div>
+            <Field
+              name="deadline"
+              component="input"
+              type="text"
+            />
+          </div>
         </div>
-      </div>
 
-      <div>
-        <button onClick={handleSubmit} disabled={pristine}>Submit</button>
-      </div>
+        <div>
+          <button onClick={handleSubmit} disabled={pristine}>Submit</button>
+        </div>
       </form >
     );
   }

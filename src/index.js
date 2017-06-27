@@ -29,7 +29,6 @@ var detectChangeOfActive = store.subscribe(function () {
   if (currentValue == previousValue && currentForm == previousForm) {
     return;
   }
-  console.log('detect')
 
   if (currentForm != previousForm && state.form.simple.values != undefined && currentValue == previousValue) {
     var activeTask = state.todo.list[state.todo.active];

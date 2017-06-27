@@ -20,22 +20,29 @@ export default class List extends React.Component {
 
   render() {
     var setActive = this.props.setActive;
-	var addItem = this.props.addItem;	
-	var removeItem = this.props.removeItem;
+    var addItem = this.props.addItem;
+    var removeItem = this.props.removeItem;
+    var activeId = this.props.store.getState().todo.active;
 
     //vytvoříme pro každou todo položku její DOM vyjádření
-    var items = this.state.todo.list.map(function(task, id) {
-      return <Item key={id} text={task} setActive={function() { setActive(id) }}/>
+    var items = this.state.todo.list.map(function (task, id) {
+      return <Item id={id}
+        text={task}
+        activeId={activeId}
+        setActive={function () {
+          setActive(id)
+        }
+        } />
     });
-	
-	var state = this.props.store.getState();
-	var getActiveId = state.todo.active;
+
+    var state = this.props.store.getState();
+    var getActiveId = state.todo.active;
 
     //vykreslíme komponenty
     return (<div>
-              <ul>{items}</ul>
-			<button onClick={addItem.bind(this,"new task")}>+</button>
-	      	<button onClick={removeItem.bind(this,getActiveId)}>X</button>
-            </div>);
+      <ul className="listUl">{items}</ul>
+      <button onClick={addItem.bind(this, "new task")}>✚</button>
+      <button onClick={removeItem.bind(this, getActiveId)}>✖</button>
+    </div>);
   }
 };
