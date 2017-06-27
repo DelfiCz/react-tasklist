@@ -1,0 +1,143 @@
+h1 {
+  font-family: Arial;
+  color: #4CAF50;
+
+}
+
+#list {
+  width: 200px;
+  float: left;
+}
+
+#form {
+  margin-left: 200px;
+  color: #4CAF50;
+  font-weight: bold;
+  font-family: Arial;
+}
+
+#app  {
+  height: 90%;
+}
+
+.clear {
+  clear: both;
+}
+
+.item, .itemActive {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+  text-align: center;
+  font-family: Arial;
+  cursor: pointer;
+}
+
+.listUl {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #f1f1f1;
+  height: 100%;
+  overflow: auto;
+}
+
+.item:hover {
+  background-color: #555;
+  color: white;
+}
+
+.itemActive {
+  background-color: #4CAF50;
+  color: white;
+}
+
+
+input[type=text], textarea {
+  width: 30%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 3px solid #ccc;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  outline: none;
+}
+
+.subtaskUl  {
+  list-style-type: none;
+
+}
+
+input[type=text]:focus, textarea:focus {
+    border: 3px solid #4CAF50;
+}
+
+
+
+button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+
+
+input[type=checkbox] {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    display: inline-block;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: 0;
+    cursor: pointer;
+}
+
+input[type=checkbox]:after {
+  content: '';
+  position: absolute;
+  display: block;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+
+input[type=checkbox]:before {
+  background: #4CAF50 url("http://i.imgur.com/dR1TM0y.png");
+  background-size: 10px 8px;
+  background-repeat: no-repeat;
+  background-position: 3px 4px;
+  position: absolute;
+  left: 2px;
+  z-index: 2;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  color: #4CAF50;
+}
+
+input[type=checkbox]:checked:before {
+    content: '';
+    position: absolute;
+    top: 0px;
+    opacity: 1;
+    left: 0px;
+    border: 1px solid #4CAF50;
+    border-radius: 2px;
+}
