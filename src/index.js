@@ -19,6 +19,19 @@ var taskList = [...store.getState().todo.list];
 
 let currentValue = -1
 let currentForm = -1
+
+function formatDate(date) {
+    var d = new Date((date+3600)*1000),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
 var detectChangeOfActive = store.subscribe(function () {
   var state = store.getState();
   let previousValue = currentValue;
@@ -35,7 +48,9 @@ var detectChangeOfActive = store.subscribe(function () {
     state.form.simple.values = {
       title: state.form.simple.values.title,
       content: state.form.simple.values.content,
-      subtasks: [...state.todo.formSubtasks]
+      subtasks: [...state.todo.formSubtasks],
+      deadline: formatDate(state.form.simple.values.deadline),
+      hasDeadline: state.form.simple.values.hasDeadline,
     }
     return;
   }
@@ -45,7 +60,9 @@ var detectChangeOfActive = store.subscribe(function () {
     state.form.simple.values = {
       title: activeTask.title,
       content: activeTask.content,
-      subtasks: [...state.todo.formSubtasks]
+      subtasks: [...state.todo.formSubtasks],
+      deadline: formatDate(activeTask.deadline),
+      hasDeadline: activeTask.hasDeadline,
     }
   }
 
@@ -66,12 +83,13 @@ var setActive = function (id) {
 var handleSubmit = function (values) {
 
   var id = store.getState().todo.active;
-  console.log(values.subtasks);
   store.dispatch({ type: 'CHANGE_TITLE', id: id, title: values.title });
   store.dispatch({ type: 'CHANGE_CONTENT', id: id, content: values.content });
   store.dispatch({ type: 'CHANGE_SUBTASKS', id: id, subtasks: values.subtasks });
-  alert("Success.")
+  store.dispatch({ type: 'CHANGE_DEADLINE', id: id, deadline: Date.parse(values.deadline)/1000-3600, hasDeadline: values.hasDeadline });
+  alert("Changes has been made.")
 }
+
 
 
 ReactDOM.render(

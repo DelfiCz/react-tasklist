@@ -22,8 +22,19 @@ class SimpleForm extends React.Component {
     var pristine = this.props.pristine;
     var submitting = this.props.submitting;
     var handleSubmit = this.props.handleSubmit;
-    var activeTask = [...this.props.store.getState().todo.list[this.props.store.getState().todo.active]]
+    var activeTask = this.props.store.getState().todo.list[this.props.store.getState().todo.active]
     var activeSubtasks = this.props.store.getState().todo.formSubtasks;
+
+    var deadlineClass = "no-expired";
+
+    if (this.props.store.getState().todo.list[this.props.store.getState().todo.active].hasDeadline == true) {
+      var deadline = this.props.store.getState().todo.list[this.props.store.getState().todo.active].deadline;
+      console.log(activeTask);
+      console.log(new Date().getTime() / 1000);
+      if (deadline + 24 * 3600 < new Date().getTime() / 1000 && !activeTask.subtasks.every((val, i, arr) => val.done == true)) {
+        deadlineClass = "expired";
+      }
+    }
 
     return (
       <form onSubmit={handleSubmit} >
@@ -98,12 +109,19 @@ class SimpleForm extends React.Component {
           </button>
         </div>
         <div>
+          <br />
           <label>Deadline</label>
           <div>
+            <Field
+              name="hasDeadline"
+              type="checkbox"
+              component="input" />
             <Field
               name="deadline"
               component="input"
               type="text"
+              className={deadlineClass}
+              placeholder="YYYY-MM-DD"
             />
           </div>
         </div>

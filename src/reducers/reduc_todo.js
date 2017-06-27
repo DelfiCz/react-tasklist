@@ -3,17 +3,17 @@
 var task00 = {
 	title: "Koupit mleko",
 	content: "",
-	subtasks: [{title: "tsk0", done: false}, {title: "tsk1", done: false}],
+	subtasks: [{ title: "tsk0", done: false }, { title: "tsk1", done: false }],
 	hasDeadline: false,
-	deadline: 0
+	deadline: ""
 };
 
 var task01 = {
 	title: "Koupit syry",
 	content: "",
-	subtasks: [{title: "syr tsk0", done: false}],
+	subtasks: [{ title: "syr tsk0", done: false }],
 	hasDeadline: false,
-	deadline: 0
+	deadline: ""
 };
 
 
@@ -24,7 +24,7 @@ var initialState = {
 };
 
 
-function formInitValues(state)	{
+function formInitValues(state) {
 
 
 }
@@ -57,7 +57,6 @@ export default function reduc_todo(state = initialState, action) {
 
 		case 'SET_ACTIVE':
 			var newList = [...state.list];
-			//formInitValues(state);
 			return {
 				list: newList,
 				active: action.id,
@@ -65,7 +64,7 @@ export default function reduc_todo(state = initialState, action) {
 			};
 
 		case 'CHANGE_TITLE':
-		
+
 			var newList = [...state.list];
 			newList[action.id].title = action.title;
 			return {
@@ -86,9 +85,15 @@ export default function reduc_todo(state = initialState, action) {
 			console.log('sd')
 			var newList = [...state.list];
 			newList[action.id].subtasks = [...action.subtasks];
-
-
-			console.log(state)
+			return {
+				list: newList,
+				active: state.active,
+				formSubtasks: [...state.formSubtasks]
+			};
+		case 'CHANGE_DEADLINE':
+			var newList = [...state.list];
+			newList[action.id].deadline = action.deadline;
+			newList[action.id].hasDeadline = action.hasDeadline;
 			return {
 				list: newList,
 				active: state.active,
