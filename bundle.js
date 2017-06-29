@@ -14249,7 +14249,7 @@ var detectChangeOfActive = store.subscribe(function () {
 });
 
 var removeItem = function removeItem(id) {
-  store.dispatch(actions.DELETE_TASK_REQUESTED());
+  store.dispatch(actions.DELETE_TASK_REQUESTED(id));
 
   _api2.default.post(store, function (response) {
     store.dispatch(actions.DELETE_TASK_SUCCEEDED());
@@ -14284,7 +14284,7 @@ var handleSubmit = function handleSubmit(values) {
   _api2.default.post(store, function (response) {
     store.dispatch(actions.POST_TASK_SUCCEEDED);
   }, function (error) {
-    store.dispatch(actions.POST_TASK_SUCCEEDED);
+    store.dispatch(actions.POST_TASK_FAILED);
   });
   alert("Changes has been made.");
 };
@@ -36094,6 +36094,7 @@ var ADD_TASK_FAILED = exports.ADD_TASK_FAILED = function ADD_TASK_FAILED() {
 };
 
 var DELETE_TASK_REQUESTED = exports.DELETE_TASK_REQUESTED = function DELETE_TASK_REQUESTED(id) {
+    console.log(id);
     return {
         type: 'DELETE_TASK_REQUESTED',
         id: id
