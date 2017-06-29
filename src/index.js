@@ -28,7 +28,7 @@ api.get(store,
 
   },
   function (error) {
-
+    store.dispatch(actions.FETCH_TASK_FAILED(response))
   });
 
 
@@ -87,14 +87,14 @@ var detectChangeOfActive = store.subscribe(function () {
 });
 
 var removeItem = function (id) {
-  store.dispatch(actions.DELETE_TASK_SUCCEEDED());
+  store.dispatch(actions.DELETE_TASK_REQUESTED(id));
 
   api.post(store,
     function (response) {
       store.dispatch(actions.DELETE_TASK_SUCCEEDED())
     },
     function (error) {
-
+      store.dispatch(actions.DELETE_TASK_FAILED())
     });
 }
 
@@ -103,12 +103,10 @@ var addItem = function (text) {
 
   api.post(store,
     function (response) {
-      console.log(response.data)
       store.dispatch(actions.ADD_TASK_SUCCEEDED())
     },
     function (error) {
-
-
+      store.dispatch(actions.ADD_TASK_FAILED())
     });
 }
 
@@ -128,11 +126,9 @@ var handleSubmit = function (values) {
   api.post(store,
     function (response) {
       store.dispatch(actions.POST_TASK_SUCCEEDED)
-
     },
     function (error) {
-
-
+      store.dispatch(actions.POST_TASK_FAILED)
     });
   alert("Changes has been made.")
 }

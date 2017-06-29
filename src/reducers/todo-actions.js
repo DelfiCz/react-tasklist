@@ -11,16 +11,29 @@ export const ADD_TASK_SUCCEEDED = () => {
     }
 };
 
-export const REMOVE_TASK_REQUESTED = (id) => {
+export const ADD_TASK_FAILED = () => {
     return {
-        type: 'REMOVE_TASK_REQUESTED',
+        type: 'ADD_TASK_FAILED'
+    }
+};
+
+export const DELETE_TASK_REQUESTED = (id) => {
+    console.log(id)
+    return {
+        type: 'DELETE_TASK_REQUESTED',
         id: id
     }
 };
 
-export const REMOVE_TASK_SUCCEEDED = () => {
+export const DELETE_TASK_SUCCEEDED = () => {
     return {
-        type: 'REMOVE_TASK_SUCCEEDED',
+        type: 'DELETE_TASK_SUCCEEDED',
+    }
+};
+
+export const DELETE_TASK_FAILED = () => {
+    return {
+        type: 'DELETE_TASK_FAILED',
     }
 };
 
@@ -37,6 +50,13 @@ export const FETCH_TASK_SUCCEEDED = (data) => {
     }
 };
 
+export const FETCH_TASK_FAILED = (data) => {
+    return {
+        type: 'FETCH_TASK_FAILED',
+        data: data
+    }
+};
+
 export const POST_TASK_REQUESTED =() => {
     return {
         type: 'POST_TASK_REQUESTED'
@@ -46,6 +66,12 @@ export const POST_TASK_REQUESTED =() => {
 export const POST_TASK_SUCCEEDED = () => {
     return {
         type: 'POST_TASK_SUCCEEDED',
+    }
+};
+
+export const POST_TASK_FAILED = () => {
+    return {
+        type: 'POST_TASK_FAILED',
     }
 };
 

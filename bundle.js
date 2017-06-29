@@ -14191,7 +14191,9 @@ store.dispatch(actions.FETCH_TASK_REQUESTED());
 
 _api2.default.get(store, function (response) {
   store.dispatch(actions.FETCH_TASK_SUCCEEDED(response));
-}, function (error) {});
+}, function (error) {
+  store.dispatch(actions.FETCH_TASK_FAILED(response));
+});
 
 function formatDate(date) {
   var d = new Date((date + 3600) * 1000),
@@ -14247,20 +14249,23 @@ var detectChangeOfActive = store.subscribe(function () {
 });
 
 var removeItem = function removeItem(id) {
-  store.dispatch(actions.DELETE_TASK_SUCCEEDED());
+  store.dispatch(actions.DELETE_TASK_REQUESTED());
 
   _api2.default.post(store, function (response) {
     store.dispatch(actions.DELETE_TASK_SUCCEEDED());
-  }, function (error) {});
+  }, function (error) {
+    store.dispatch(actions.DELETE_TASK_FAILED());
+  });
 };
 
 var addItem = function addItem(text) {
   store.dispatch(actions.ADD_TASK_REQUESTED(text));
 
   _api2.default.post(store, function (response) {
-    console.log(response.data);
     store.dispatch(actions.ADD_TASK_SUCCEEDED());
-  }, function (error) {});
+  }, function (error) {
+    store.dispatch(actions.ADD_TASK_FAILED());
+  });
 };
 
 var setActive = function setActive(id) {
@@ -14278,7 +14283,9 @@ var handleSubmit = function handleSubmit(values) {
 
   _api2.default.post(store, function (response) {
     store.dispatch(actions.POST_TASK_SUCCEEDED);
-  }, function (error) {});
+  }, function (error) {
+    store.dispatch(actions.POST_TASK_SUCCEEDED);
+  });
   alert("Changes has been made.");
 };
 
@@ -35483,7 +35490,7 @@ function reduc_todo() {
 				formSubtasks: [].concat(_toConsumableArray(state.formSubtasks))
 			};
 
-		case 'REMOVE_TASK_REQUESTED':
+		case 'DELETE_TASK_REQUESTED':
 			var newList = [].concat(_toConsumableArray(state.list));
 			newList.splice(action.id, 1);
 			return {
@@ -35520,7 +35527,6 @@ function reduc_todo() {
 			};
 
 		case 'CHANGE_TASK_SUBTASKS':
-			console.log(action);
 			var newList = [].concat(_toConsumableArray(state.list));
 			newList[action.id].subtasks = [].concat(_toConsumableArray(action.subtasks));
 			return {
@@ -36081,16 +36087,28 @@ var ADD_TASK_SUCCEEDED = exports.ADD_TASK_SUCCEEDED = function ADD_TASK_SUCCEEDE
     };
 };
 
-var REMOVE_TASK_REQUESTED = exports.REMOVE_TASK_REQUESTED = function REMOVE_TASK_REQUESTED(id) {
+var ADD_TASK_FAILED = exports.ADD_TASK_FAILED = function ADD_TASK_FAILED() {
     return {
-        type: 'REMOVE_TASK_REQUESTED',
+        type: 'ADD_TASK_FAILED'
+    };
+};
+
+var DELETE_TASK_REQUESTED = exports.DELETE_TASK_REQUESTED = function DELETE_TASK_REQUESTED(id) {
+    return {
+        type: 'DELETE_TASK_REQUESTED',
         id: id
     };
 };
 
-var REMOVE_TASK_SUCCEEDED = exports.REMOVE_TASK_SUCCEEDED = function REMOVE_TASK_SUCCEEDED() {
+var DELETE_TASK_SUCCEEDED = exports.DELETE_TASK_SUCCEEDED = function DELETE_TASK_SUCCEEDED() {
     return {
-        type: 'REMOVE_TASK_SUCCEEDED'
+        type: 'DELETE_TASK_SUCCEEDED'
+    };
+};
+
+var DELETE_TASK_FAILED = exports.DELETE_TASK_FAILED = function DELETE_TASK_FAILED() {
+    return {
+        type: 'DELETE_TASK_FAILED'
     };
 };
 
@@ -36107,6 +36125,13 @@ var FETCH_TASK_SUCCEEDED = exports.FETCH_TASK_SUCCEEDED = function FETCH_TASK_SU
     };
 };
 
+var FETCH_TASK_FAILED = exports.FETCH_TASK_FAILED = function FETCH_TASK_FAILED(data) {
+    return {
+        type: 'FETCH_TASK_FAILED',
+        data: data
+    };
+};
+
 var POST_TASK_REQUESTED = exports.POST_TASK_REQUESTED = function POST_TASK_REQUESTED() {
     return {
         type: 'POST_TASK_REQUESTED'
@@ -36116,6 +36141,12 @@ var POST_TASK_REQUESTED = exports.POST_TASK_REQUESTED = function POST_TASK_REQUE
 var POST_TASK_SUCCEEDED = exports.POST_TASK_SUCCEEDED = function POST_TASK_SUCCEEDED() {
     return {
         type: 'POST_TASK_SUCCEEDED'
+    };
+};
+
+var POST_TASK_FAILED = exports.POST_TASK_FAILED = function POST_TASK_FAILED() {
+    return {
+        type: 'POST_TASK_FAILED'
     };
 };
 

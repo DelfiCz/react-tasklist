@@ -22,7 +22,7 @@ export default function reduc_todo(state = initialState, action) {
 				formSubtasks: [...state.formSubtasks]
 			};
 
-		case 'REMOVE_TASK_REQUESTED':
+		case 'DELETE_TASK_REQUESTED':
 			var newList = [...state.list];
 			newList.splice(action.id, 1);
 			return {
@@ -59,7 +59,6 @@ export default function reduc_todo(state = initialState, action) {
 			};
 
 		case 'CHANGE_TASK_SUBTASKS':
-				console.log(action)
 			var newList = [...state.list];
 			newList[action.id].subtasks = [...action.subtasks];
 			return {
