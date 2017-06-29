@@ -14154,9 +14154,9 @@ var _reactDom = __webpack_require__(364);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _reduc_todo = __webpack_require__(450);
+var _todo = __webpack_require__(450);
 
-var _reduc_todo2 = _interopRequireDefault(_reduc_todo);
+var _todo2 = _interopRequireDefault(_todo);
 
 var _List = __webpack_require__(451);
 
@@ -14178,28 +14178,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-//var api = require('./api');
+var actions = __webpack_require__(457);
 
-var reducers = { todo: _reduc_todo2.default, form: _reduxForm.reducer };
+
+console.log(actions);
+var reducers = { todo: _todo2.default, form: _reduxForm.reducer };
 var reducer = (0, _redux.combineReducers)(reducers);
 var store = (0, _redux.createStore)(reducer, undefined, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 var taskList = [].concat(_toConsumableArray(store.getState().todo.list));
 
+store.dispatch(actions.FETCH_TASK_REQUESTED());
+
 _api2.default.get(store, function (response) {
-  console.log(response);
-  store.dispatch({
-    type: "TASK_FETCH_SUCCEEDED",
-    data: response
-  });
-
-  return "success";
-}, function (error) {
-  console.log(error);
-  return "error";
-});
-
-var currentValue = -1;
-var currentForm = -1;
+  store.dispatch(actions.FETCH_TASK_SUCCEEDED(response));
+}, function (error) {});
 
 function formatDate(date) {
   var d = new Date((date + 3600) * 1000),
@@ -14212,6 +14204,9 @@ function formatDate(date) {
 
   return [year, month, day].join('-');
 }
+
+var currentValue = -1;
+var currentForm = -1;
 
 var detectChangeOfActive = store.subscribe(function () {
 
@@ -14252,50 +14247,38 @@ var detectChangeOfActive = store.subscribe(function () {
 });
 
 var removeItem = function removeItem(id) {
-  store.dispatch({ type: 'REMOVE', id: id });
+  store.dispatch(actions.DELETE_TASK_SUCCEEDED());
+
+  _api2.default.post(store, function (response) {
+    store.dispatch(actions.DELETE_TASK_SUCCEEDED());
+  }, function (error) {});
 };
 
 var addItem = function addItem(text) {
-  store.dispatch({ type: 'ADD', text: text });
+  store.dispatch(actions.ADD_TASK_REQUESTED(text));
 
   _api2.default.post(store, function (response) {
     console.log(response.data);
-    store.dispatch({
-      type: "TASK_POST_SUCCEEDED"
-    });
-
-    return "success";
-  }, function (error) {
-    console.log(error);
-    return "error";
-  });
+    store.dispatch(actions.ADD_TASK_SUCCEEDED());
+  }, function (error) {});
 };
 
 var setActive = function setActive(id) {
-  store.dispatch({ type: 'SET_ACTIVE', id: id });
+  store.dispatch(actions.SET_TASK_ACTIVE(id));
 };
 
 var handleSubmit = function handleSubmit(values) {
 
   var id = store.getState().todo.active;
-  store.dispatch({ type: 'CHANGE_TITLE', id: id, title: values.title });
-  store.dispatch({ type: 'CHANGE_CONTENT', id: id, content: values.content });
-  store.dispatch({ type: 'CHANGE_SUBTASKS', id: id, subtasks: values.subtasks });
-  store.dispatch({ type: 'CHANGE_DEADLINE', id: id, deadline: Date.parse(values.deadline) / 1000 - 3600, hasDeadline: values.hasDeadline });
-
-  store.dispatch({ type: 'TASK_POST_SUCCEEDED' });
+  store.dispatch(actions.CHANGE_TASK_TITLE(id, values));
+  store.dispatch(actions.CHANGE_TASK_CONTENT(id, values));
+  store.dispatch(actions.CHANGE_TASK_SUBTASKS(id, values));
+  store.dispatch(actions.CHANGE_TASK_DEADLINE(id, values));
+  store.dispatch(actions.POST_TASK_REQUESTED());
 
   _api2.default.post(store, function (response) {
-    console.log(response.data);
-    store.dispatch({
-      type: "TASK_POST_SUCCEEDED"
-    });
-
-    return "success";
-  }, function (error) {
-    console.log(error);
-    return "error";
-  });
+    store.dispatch(actions.POST_TASK_SUCCEEDED);
+  }, function (error) {});
   alert("Changes has been made.");
 };
 
@@ -35474,37 +35457,11 @@ exports.default = reduc_todo;
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var task00 = {
-	title: "Postavit dum",
-	content: "",
-	subtasks: [{ title: "Nakoupit do baumaxu", done: false }, { title: "Zaplatit zedniky", done: false }],
-	hasDeadline: false,
-	deadline: ""
-};
-
-var task01 = {
-	title: "Koupit nabytek",
-	content: "",
-	subtasks: [{ title: "Navstivit IKEA", done: false }],
-	hasDeadline: false,
-	deadline: ""
-};
-
-/* var initialState = {
-	list: [task00, task01],
-	active: 0,
-	formSubtasks: [...task00.subtasks]
-};
-
-*/
-
 var initialState = {
 	list: [],
 	active: 0,
 	formSubtasks: []
 };
-
-//while (!executed);
 
 function reduc_todo() {
 	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
@@ -35513,7 +35470,7 @@ function reduc_todo() {
 
 	switch (action.type) {
 
-		case 'ADD':
+		case 'ADD_TASK_REQUESTED':
 			var newTask = {
 				title: action.text,
 				content: "",
@@ -35526,7 +35483,7 @@ function reduc_todo() {
 				formSubtasks: [].concat(_toConsumableArray(state.formSubtasks))
 			};
 
-		case 'REMOVE':
+		case 'REMOVE_TASK_REQUESTED':
 			var newList = [].concat(_toConsumableArray(state.list));
 			newList.splice(action.id, 1);
 			return {
@@ -35535,7 +35492,7 @@ function reduc_todo() {
 				formSubtasks: [].concat(_toConsumableArray(state.formSubtasks))
 			};
 
-		case 'SET_ACTIVE':
+		case 'SET_TASK_ACTIVE':
 			var newList = [].concat(_toConsumableArray(state.list));
 			return {
 				list: newList,
@@ -35543,7 +35500,7 @@ function reduc_todo() {
 				formSubtasks: [].concat(_toConsumableArray(newList[action.id].subtasks))
 			};
 
-		case 'CHANGE_TITLE':
+		case 'CHANGE_TASK_TITLE':
 
 			var newList = [].concat(_toConsumableArray(state.list));
 			newList[action.id].title = action.title;
@@ -35552,7 +35509,8 @@ function reduc_todo() {
 				active: state.active,
 				formSubtasks: [].concat(_toConsumableArray(state.formSubtasks))
 			};
-		case 'CHANGE_CONTENT':
+		case 'CHANGE_TASK_CONTENT':
+
 			var newList = [].concat(_toConsumableArray(state.list));
 			newList[action.id].content = action.content;
 			return {
@@ -35561,8 +35519,8 @@ function reduc_todo() {
 				formSubtasks: [].concat(_toConsumableArray(state.formSubtasks))
 			};
 
-		case 'CHANGE_SUBTASKS':
-			console.log('sd');
+		case 'CHANGE_TASK_SUBTASKS':
+			console.log(action);
 			var newList = [].concat(_toConsumableArray(state.list));
 			newList[action.id].subtasks = [].concat(_toConsumableArray(action.subtasks));
 			return {
@@ -35570,7 +35528,8 @@ function reduc_todo() {
 				active: state.active,
 				formSubtasks: [].concat(_toConsumableArray(state.formSubtasks))
 			};
-		case 'CHANGE_DEADLINE':
+		case 'CHANGE_TASK_DEADLINE':
+
 			var newList = [].concat(_toConsumableArray(state.list));
 			newList[action.id].deadline = action.deadline;
 			newList[action.id].hasDeadline = action.hasDeadline;
@@ -35580,7 +35539,7 @@ function reduc_todo() {
 				formSubtasks: [].concat(_toConsumableArray(state.formSubtasks))
 			};
 
-		case 'TASK_FETCH_REQUESTED':
+		case 'FETCH_TASK_REQUESTED':
 			var emptyState = {
 				list: [],
 				active: 0,
@@ -35588,14 +35547,14 @@ function reduc_todo() {
 			};
 			return emptyState;
 
-		case 'TASK_FETCH_SUCCEEDED':
+		case 'FETCH_TASK_SUCCEEDED':
 			var newState = action.data;
 			return newState;
 
-		case 'TASK_POST_REQUESTED':
+		case 'POST_TASK_REQUESTED':
 			return state;
 
-		case 'TASK_POST_SUCCEEDED':
+		case 'POST_TASK_SUCCEEDED':
 			return state;
 
 		default:
@@ -36035,40 +35994,21 @@ function r(e,t){if(!i.canUseDOM||t&&!("addEventListener"in document))return!1;va
 "use strict";
 
 
-var _fs = __webpack_require__(456);
+//var fs = require('fs');
 
-var _fs2 = _interopRequireDefault(_fs);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports.get = function (store, callback, callbackError) {
-    console.log("TASK_FETCH_REQUESTED");
-    store.dispatch({
-        type: "TASK_FETCH_REQUESTED"
-    });
-    var data = __webpack_require__(457);
-    console.log(data);
+    var data = __webpack_require__(456);
     callback(data);
 };
 
 module.exports.post = function (store, callback, callbackError) {
-    console.log("TASK_POST_REQUESTED");
-    store.dispatch({
-        type: "TASK_POST_REQUESTED"
-    });
 
-    //var fs = require('fs')
-    console.log(_fs2.default);
+    //fs.writeFile("../data.json",store.getState().todo)
 };
 
 /***/ }),
 /* 456 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 457 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -36113,6 +36053,111 @@ module.exports = {
 			"done": false
 		}
 	]
+};
+
+/***/ }),
+/* 457 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+var ADD_TASK_REQUESTED = exports.ADD_TASK_REQUESTED = function ADD_TASK_REQUESTED(text) {
+    return {
+        type: 'ADD_TASK_REQUESTED',
+        text: text
+    };
+};
+
+var ADD_TASK_SUCCEEDED = exports.ADD_TASK_SUCCEEDED = function ADD_TASK_SUCCEEDED() {
+    return {
+        type: 'ADD_TASK_SUCCEEDED'
+    };
+};
+
+var REMOVE_TASK_REQUESTED = exports.REMOVE_TASK_REQUESTED = function REMOVE_TASK_REQUESTED(id) {
+    return {
+        type: 'REMOVE_TASK_REQUESTED',
+        id: id
+    };
+};
+
+var REMOVE_TASK_SUCCEEDED = exports.REMOVE_TASK_SUCCEEDED = function REMOVE_TASK_SUCCEEDED() {
+    return {
+        type: 'REMOVE_TASK_SUCCEEDED'
+    };
+};
+
+var FETCH_TASK_REQUESTED = exports.FETCH_TASK_REQUESTED = function FETCH_TASK_REQUESTED() {
+    return {
+        type: 'FETCH_TASK_REQUESTED'
+    };
+};
+
+var FETCH_TASK_SUCCEEDED = exports.FETCH_TASK_SUCCEEDED = function FETCH_TASK_SUCCEEDED(data) {
+    return {
+        type: 'FETCH_TASK_SUCCEEDED',
+        data: data
+    };
+};
+
+var POST_TASK_REQUESTED = exports.POST_TASK_REQUESTED = function POST_TASK_REQUESTED() {
+    return {
+        type: 'POST_TASK_REQUESTED'
+    };
+};
+
+var POST_TASK_SUCCEEDED = exports.POST_TASK_SUCCEEDED = function POST_TASK_SUCCEEDED() {
+    return {
+        type: 'POST_TASK_SUCCEEDED'
+    };
+};
+
+var SET_TASK_ACTIVE = exports.SET_TASK_ACTIVE = function SET_TASK_ACTIVE(id) {
+    return {
+        type: 'SET_TASK_ACTIVE',
+        id: id
+    };
+};
+
+var CHANGE_TASK_TITLE = exports.CHANGE_TASK_TITLE = function CHANGE_TASK_TITLE(id, values) {
+    return {
+        type: 'CHANGE_TASK_TITLE',
+        id: id,
+        title: values.title
+    };
+};
+
+var CHANGE_TASK_CONTENT = exports.CHANGE_TASK_CONTENT = function CHANGE_TASK_CONTENT(id, values) {
+    return {
+        type: 'CHANGE_TASK_CONTENT',
+        id: id,
+        content: values.content
+    };
+};
+
+var CHANGE_TASK_SUBTASKS = exports.CHANGE_TASK_SUBTASKS = function CHANGE_TASK_SUBTASKS(id, values) {
+    console.log(values);
+    return {
+        type: 'CHANGE_TASK_SUBTASKS',
+        id: id,
+        subtasks: [].concat(_toConsumableArray(values.subtasks))
+    };
+};
+
+var CHANGE_TASK_DEADLINE = exports.CHANGE_TASK_DEADLINE = function CHANGE_TASK_DEADLINE(id, values) {
+    return {
+        type: 'CHANGE_TASK_DEADLINE',
+        id: id,
+        deadline: Date.parse(values.deadline) / 1000 - 3600,
+        hasDeadline: values.hasDeadline
+    };
 };
 
 /***/ })
