@@ -3,7 +3,8 @@ import { reducer as formReducer } from 'redux-form';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import reduc_todo from './reducers/reduc_todo'
+import reduc_todo from './reducers/todo'
+var actions = require('./reducers/todo-actions')
 import List from './components/List';
 import SimpleForm from './components/SimpleForm';
 
@@ -11,25 +12,22 @@ import SimpleForm from './components/SimpleForm';
 import { Provider } from 'react-redux';
 import { Values } from 'redux-form-website-template';
 
-import api from './api'
-//var api = require('./api');
+import api from './api/api';
 
+console.log(actions)
 const reducers = { todo: reduc_todo, form: formReducer }
 const reducer = combineReducers(reducers)
 const store = createStore(reducer, undefined, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 var taskList = [...store.getState().todo.list];
 
+store.dispatch(actions.FETCH_TASK_REQUESTED())
+
 api.get(store,
   function (response) {
-    store.dispatch({
-      type: "TASK_FETCH_SUCCEEDED",
-      data: response
-    })
+    store.dispatch(actions.FETCH_TASK_SUCCEEDED(response))
 
-    return "success"
   },
   function (error) {
-    return "error";
 
   });
 
@@ -50,7 +48,6 @@ let currentValue = -1
 let currentForm = -1
 
 var detectChangeOfActive = store.subscribe(function () {
-
 
   var state = store.getState();
   let previousValue = currentValue;
@@ -90,56 +87,51 @@ var detectChangeOfActive = store.subscribe(function () {
 });
 
 var removeItem = function (id) {
-  store.dispatch({ type: 'REMOVE', id: id });
+  store.dispatch(actions.DELETE_TASK_SUCCEEDED());
+
+  api.post(store,
+    function (response) {
+      store.dispatch(actions.DELETE_TASK_SUCCEEDED())
+    },
+    function (error) {
+
+    });
 }
 
 var addItem = function (text) {
-  store.dispatch({ type: 'ADD', text: text });
+  store.dispatch(actions.ADD_TASK_REQUESTED(text));
 
   api.post(store,
     function (response) {
       console.log(response.data)
-      store.dispatch({
-        type: "TASK_POST_SUCCEEDED",
-      })
-
-      return "success"
+      store.dispatch(actions.ADD_TASK_SUCCEEDED())
     },
     function (error) {
-      console.log(error)
-      return "error";
+
 
     });
 }
 
 var setActive = function (id) {
-  store.dispatch({ type: 'SET_ACTIVE', id: id });
+  store.dispatch(actions.SET_TASK_ACTIVE(id));
 }
 
 var handleSubmit = function (values) {
 
   var id = store.getState().todo.active;
-  store.dispatch({ type: 'CHANGE_TITLE', id: id, title: values.title });
-  store.dispatch({ type: 'CHANGE_CONTENT', id: id, content: values.content });
-  store.dispatch({ type: 'CHANGE_SUBTASKS', id: id, subtasks: values.subtasks });
-  store.dispatch({ type: 'CHANGE_DEADLINE', id: id, deadline: Date.parse(values.deadline) / 1000 - 3600, hasDeadline: values.hasDeadline });
-
-
-
-  store.dispatch({ type: 'TASK_POST_SUCCEEDED' });
+  store.dispatch(actions.CHANGE_TASK_TITLE(id, values));
+  store.dispatch(actions.CHANGE_TASK_CONTENT(id, values));
+  store.dispatch(actions.CHANGE_TASK_SUBTASKS(id, values));
+  store.dispatch(actions.CHANGE_TASK_DEADLINE(id, values));
+  store.dispatch(actions.POST_TASK_REQUESTED());
 
   api.post(store,
     function (response) {
-      console.log(response.data)
-      store.dispatch({
-        type: "TASK_POST_SUCCEEDED",
-      })
+      store.dispatch(actions.POST_TASK_SUCCEEDED)
 
-      return "success"
     },
     function (error) {
-      console.log(error)
-      return "error";
+
 
     });
   alert("Changes has been made.")

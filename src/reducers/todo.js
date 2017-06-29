@@ -1,30 +1,3 @@
-
-
-var task00 = {
-	title: "Postavit dum",
-	content: "",
-	subtasks: [{ title: "Nakoupit do baumaxu", done: false }, { title: "Zaplatit zedniky", done: false }],
-	hasDeadline: false,
-	deadline: ""
-};
-
-var task01 = {
-	title: "Koupit nabytek",
-	content: "",
-	subtasks: [{ title: "Navstivit IKEA", done: false }],
-	hasDeadline: false,
-	deadline: ""
-};
-
-
-/* var initialState = {
-	list: [task00, task01],
-	active: 0,
-	formSubtasks: [...task00.subtasks]
-};
-
-*/
-
 var initialState = {
 	list: [],
 	active: 0,
@@ -32,15 +5,11 @@ var initialState = {
 };
 
 
-
-
-//while (!executed);
-
 export default function reduc_todo(state = initialState, action) {
 
 	switch (action.type) {
 
-		case 'ADD':
+		case 'ADD_TASK_REQUESTED':
 			var newTask = {
 				title: action.text,
 				content: "",
@@ -53,7 +22,7 @@ export default function reduc_todo(state = initialState, action) {
 				formSubtasks: [...state.formSubtasks]
 			};
 
-		case 'REMOVE':
+		case 'REMOVE_TASK_REQUESTED':
 			var newList = [...state.list];
 			newList.splice(action.id, 1);
 			return {
@@ -62,7 +31,7 @@ export default function reduc_todo(state = initialState, action) {
 				formSubtasks: [...state.formSubtasks]
 			};
 
-		case 'SET_ACTIVE':
+		case 'SET_TASK_ACTIVE':
 			var newList = [...state.list];
 			return {
 				list: newList,
@@ -70,7 +39,7 @@ export default function reduc_todo(state = initialState, action) {
 				formSubtasks: [...newList[action.id].subtasks]
 			};
 
-		case 'CHANGE_TITLE':
+		case 'CHANGE_TASK_TITLE':
 
 			var newList = [...state.list];
 			newList[action.id].title = action.title;
@@ -79,7 +48,8 @@ export default function reduc_todo(state = initialState, action) {
 				active: state.active,
 				formSubtasks: [...state.formSubtasks]
 			};
-		case 'CHANGE_CONTENT':
+		case 'CHANGE_TASK_CONTENT':
+						
 			var newList = [...state.list];
 			newList[action.id].content = action.content;
 			return {
@@ -88,8 +58,8 @@ export default function reduc_todo(state = initialState, action) {
 				formSubtasks: [...state.formSubtasks]
 			};
 
-		case 'CHANGE_SUBTASKS':
-			console.log('sd')
+		case 'CHANGE_TASK_SUBTASKS':
+				console.log(action)
 			var newList = [...state.list];
 			newList[action.id].subtasks = [...action.subtasks];
 			return {
@@ -97,7 +67,8 @@ export default function reduc_todo(state = initialState, action) {
 				active: state.active,
 				formSubtasks: [...state.formSubtasks]
 			};
-		case 'CHANGE_DEADLINE':
+		case 'CHANGE_TASK_DEADLINE':
+
 			var newList = [...state.list];
 			newList[action.id].deadline = action.deadline;
 			newList[action.id].hasDeadline = action.hasDeadline;
@@ -107,7 +78,7 @@ export default function reduc_todo(state = initialState, action) {
 				formSubtasks: [...state.formSubtasks]
 			};
 
-		case 'TASK_FETCH_REQUESTED':
+		case 'FETCH_TASK_REQUESTED':
 			var emptyState = {
 				list: [],
 				active: 0,
@@ -115,14 +86,14 @@ export default function reduc_todo(state = initialState, action) {
 			};
 			return emptyState;
 
-		case 'TASK_FETCH_SUCCEEDED':
+		case 'FETCH_TASK_SUCCEEDED':
 			var newState = action.data;
 			return newState;
 
-		case 'TASK_POST_REQUESTED':
+		case 'POST_TASK_REQUESTED':
 			return state;
 
-		case 'TASK_POST_SUCCEEDED':
+		case 'POST_TASK_SUCCEEDED':
 			return state;
 
 		default:
