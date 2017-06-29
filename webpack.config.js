@@ -14,5 +14,10 @@ module.exports = {
               }
           }
        ]
+    },
+    node: {
+        module: "empty",
+        fs: "empty"
     }
+
 };

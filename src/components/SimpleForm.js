@@ -27,6 +27,10 @@ class SimpleForm extends React.Component {
 
     var deadlineClass = "no-expired";
 
+    if (this.props.store.getState().todo.list.length == 0)  {
+      return ( <div id="emptyForm"></div>);
+    }
+
     if (this.props.store.getState().todo.list[this.props.store.getState().todo.active].hasDeadline == true) {
       var deadline = this.props.store.getState().todo.list[this.props.store.getState().todo.active].deadline;
       console.log(activeTask);

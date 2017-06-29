@@ -1,0 +1,43 @@
+{
+	"list": [
+		{
+			"title": "Postavit dum",
+			"content": "",
+			"subtasks": [
+				{
+					"title": "Nakoupit do baumaxu",
+					"done": false
+				},
+				{
+					"title": "Zaplatit zedniky",
+					"done": false
+				}
+			],
+			"hasDeadline": false,
+			"deadline": ""
+		},
+		{
+			"title": "Koupit nabytek",
+			"content": "",
+			"subtasks": [
+				{
+					"title": "Navstivit IKEA",
+					"done": false
+				}
+			],
+			"hasDeadline": false,
+			"deadline": ""
+		}
+	],
+	"active": 0,
+	"formSubtasks": [
+		{
+			"title": "Nakoupit do baumaxu",
+			"done": false
+		},
+		{
+			"title": "Zaplatit zedniky",
+			"done": false
+		}
+	]
+}

@@ -17,17 +17,24 @@ var task01 = {
 };
 
 
-var initialState = {
+/* var initialState = {
 	list: [task00, task01],
 	active: 0,
 	formSubtasks: [...task00.subtasks]
 };
 
+*/
 
-function formInitValues(state) {
+var initialState = {
+	list: [],
+	active: 0,
+	formSubtasks: []
+};
 
 
-}
+
+
+//while (!executed);
 
 export default function reduc_todo(state = initialState, action) {
 
@@ -99,6 +106,24 @@ export default function reduc_todo(state = initialState, action) {
 				active: state.active,
 				formSubtasks: [...state.formSubtasks]
 			};
+
+		case 'TASK_FETCH_REQUESTED':
+			var emptyState = {
+				list: [],
+				active: 0,
+				formSubtasks: []
+			};
+			return emptyState;
+
+		case 'TASK_FETCH_SUCCEEDED':
+			var newState = action.data;
+			return newState;
+
+		case 'TASK_POST_REQUESTED':
+			return state;
+
+		case 'TASK_POST_SUCCEEDED':
+			return state;
 
 		default:
 			return state;
